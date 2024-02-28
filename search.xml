@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>详解RPC协议</title>
+      <link href="/post/b9eb0f9.html"/>
+      <url>/post/b9eb0f9.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="1-什么是RPC协议"><a href="#1-什么是RPC协议" class="headerlink" title="1. 什么是RPC协议"></a>1. 什么是RPC协议</h1><p>在最早的时候，进程只能获取自己栈帧内的数据，例如有一个写进程又有一个读进程，两者是无法数据通信的。为了解决这个问题，出现了本地进程间通信IPC（Inter-Process Communication）技术，通过如共享内存，管道等手段，来交换数据。但后来业务逐渐复杂，磁盘、CPU等资源逐渐达到瓶颈，人们开始考虑将多台计算机组成一个集群来提高服务的吞吐能力，这就是早期的分布式。</p><p>RPC（Remote Procedure Call），即远程程序调用协议，可以理解为RPC是将进程间通信的范围从单机扩大到了一个共享网络中，这样不同服务间调用方法像同一服务间调用本地方法一样，而不需要调用者了解底层网络技术的协议。</p><p>RPC其实已经是一种泛化的概念，可以说一切远程调用手段都属于RPC的范畴，而与具体的通信协议如HTTP还是TCP无关。有许多不同的技术实现RPC，如Thrift、gRPC等。</p><h1 id="2-优缺点"><a href="#2-优缺点" class="headerlink" title="2. 优缺点"></a>2. 优缺点</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> 网络 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 协议 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Markdown语法</title>
       <link href="/post/3c50d03d.html"/>
       <url>/post/3c50d03d.html</url>
@@ -29,11 +54,11 @@
     
     
     <entry>
-      <title>详解Grpg协议</title>
+      <title>详解gRPC协议</title>
       <link href="/post/12cc1a39.html"/>
       <url>/post/12cc1a39.html</url>
       
-        <content type="html"><![CDATA[<h1 id="1-什么是Grpg协议"><a href="#1-什么是Grpg协议" class="headerlink" title="1. 什么是Grpg协议"></a>1. 什么是Grpg协议</h1><pre><code>Grpc[https://grpc.io/]</code></pre>]]></content>
+        <content type="html"><![CDATA[<h1 id="1-什么是gRPC协议"><a href="#1-什么是gRPC协议" class="headerlink" title="1. 什么是gRPC协议"></a>1. 什么是gRPC协议</h1><p><a href="https://grpc.io/">gRPC</a> 是一个可在任何环境中运行的现代开源高性能远程过程调用（RPC）框架。它可以高效地连接数据中心内和数据中心间的服务，并为负载平衡、跟踪、健康检查和身份验证提供可插拔的支持。它还适用于分布式计算的最后一英里，将设备、移动应用程序和浏览器连接到后端服务。</p>]]></content>
       
       
       <categories>
