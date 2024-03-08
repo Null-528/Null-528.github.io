@@ -8,7 +8,7 @@
       <link href="/post/5a25e7f5.html"/>
       <url>/post/5a25e7f5.html</url>
       
-        <content type="html"><![CDATA[<p>我们在之前的文章中介绍了gRPC协议使用的protobuf，从而定义gRPC service和具体用到的对象模型。这篇文章中，我们来具体通过gRPC来调用一个服务，看看gRPC是如何工作的。</p>]]></content>
+        <content type="html"><![CDATA[<p>我们在之前的文章中介绍了gRPC协议使用的protobuf，从而定义gRPC service和具体用到的对象模型。这篇文章中，我们来具体通过gRPC来调用一个服务，看看gRPC是如何工作的。</p><p>gRPC 使用 HTTP&#x2F;2 作为传输协议。 虽然与 HTTP 1.1 也能兼容，但 HTTP&#x2F;2 具有许多高级功能：</p><p>用于数据传输的二进制组帧协议 - 与 HTTP 1.1 不同，HTTP 1.1 是基于文本的。<br>对通过同一连接发送多个并行请求的多路复用支持 - HTTP 1.1 将处理限制为一次处理一个请求&#x2F;响应消息。<br>双向全双工通信，用于同时发送客户端请求和服务器响应。<br>内置流式处理，支持对大型数据集进行异步流式处理的请求和响应。<br>减少网络使用率的标头压缩。<br>gRPC 是轻量型且高性能的。 其处理速度可以比 JSON 序列化快 8 倍，消息小 60% 到 80%。 在 Microsoft Windows Communication Foundation (WCF) 中，gRPC 的性能超过经过高度优化的 NetTCP 绑定的速度和效率。 与偏向于 Microsoft 堆栈的 NetTCP 不同，gRPC 是跨平台的。</p><p>建议在以下场景中使用 gRPC：</p><p>需要立即响应才能继续处理的同步后端微服务到微服务通信。<br>需要支持混合编程平台的 Polyglot 环境。<br>性能至关重要的低延迟和高吞吐量通信。<br>点到点实时通信 - gRPC 无需轮询即可实时推送消息，并且能对双向流式处理提供出色的支持。<br>网络受约束环境 - 二进制 gRPC 消息始终小于等效的基于文本的 JSON 消息。<br>在撰写本文时，gRPC 主要用于后端服务。 新式浏览器无法提供支持前端 gRPC 客户端所需的 HTTP&#x2F;2 控制级别。 也就是说，支持使用 .NET 的 gRPC-Web，能够从使用 JavaScript 或 Blazor WebAssembly 技术构建的基于浏览器的应用进行 gRPC 通信。 gRPC-Web 使 ASP.NET Core gRPC 应用能支持浏览器应用中的 gRPC 功能：</p><p>强类型、代码生成的客户端<br>压缩 Protobuf 消息<br>服务器流式处理</p>]]></content>
       
       
       <categories>
@@ -155,6 +155,31 @@
         <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
       
       
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>IDEA修改使用的JDK版本</title>
+      <link href="/post/2052380.html"/>
+      <url>/post/2052380.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在实际开发中偶尔会碰到需要切换JDK版本的情况，就我自己而言，大范围修改JDK版本有两次：</p><p>一次是由于我是21年开始使用MAC M1作为主力开发，当时Open JDK兼容性不太好，因此选择了zulu JDK。但不同JDK的实现有些差异，切换后可能会发现部分类丢失等情况导致编译异常。在Open JDK兼容M1版本后，果断将所有项目保持统一切换回Open JDK。</p><p>还有一次就是在开发的产品的JDK版本升级，公司要求所有产品都升级到JDK11以上，因此JDK8的老产品都进行了相关升级。</p><p>有时会记不清具体需要修改哪些地方导致遗漏，因此写这篇文章记录一下。</p><ol><li>修改项目编译使用的JDK版本<br>首先在主菜单IntelliJ IDEA&#x2F;preferences（windows版本对应全局settings界面）中，找到Build,Execution,Deployment -&gt; Compiler，修改编译使用的版本，然后Apply。</li></ol><p><img src="/../images/IDEA%E4%BF%AE%E6%94%B9%E4%BD%BF%E7%94%A8%E7%9A%84JDK%E7%89%88%E6%9C%AC/1.png"></p><ol start="2"><li>添加项目JDK版本路径<br>如果是一个全新版本的JDK，那么需要在主菜单的File -&gt; Project Structure中，找到Project Settings -&gt; Platform Settings -&gt; SDKs中，添加JDK名称和对应路径。</li></ol><p><img src="/../images/IDEA%E4%BF%AE%E6%94%B9%E4%BD%BF%E7%94%A8%E7%9A%84JDK%E7%89%88%E6%9C%AC/2.png"></p><ol start="3"><li>修改项目整体默认使用的JDK版本+路径<br>还是在Project Structure中，找到Project Settings -&gt; Project，修改JDK 和对应的language level。</li></ol><p><img src="/../images/IDEA%E4%BF%AE%E6%94%B9%E4%BD%BF%E7%94%A8%E7%9A%84JDK%E7%89%88%E6%9C%AC/3.png"></p><ol start="4"><li>修改每个模块使用的JDK版本<br>这部分可以按需调整，比如某些模块使用JDK8，而其他模块使用JDK11。还是在Project Structure中，找到Project Settings -&gt; Modules，修改source中的JDK 和对应dependencies的language level。</li></ol><p><img src="/../images/IDEA%E4%BF%AE%E6%94%B9%E4%BD%BF%E7%94%A8%E7%9A%84JDK%E7%89%88%E6%9C%AC/4.1.png"></p><p><img src="/../images/IDEA%E4%BF%AE%E6%94%B9%E4%BD%BF%E7%94%A8%E7%9A%84JDK%E7%89%88%E6%9C%AC/4.2.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> IDEA,JDK </tag>
+            
+        </tags>
       
     </entry>
     
