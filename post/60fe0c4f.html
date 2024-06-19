@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【计算机组成原理】基础 | EternalLoop</title><meta name="author" content="Amber"><meta name="copyright" content="Amber"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#455227"><meta name="description" content="信息的表达 思考: 我们为什么需要计算机？它是用来解决什么问题的？ 本质上就是我们采用可操作的电路，来运输、计算和记录信息。为了实现这个目标，我们需要思考如何将信息通过合理的形式，在电路上进行表达（甚至后续进行的进行检测和修复）。  我们需要将概念落地工程化。首先，怎样在电路中表达信息？正如电路有连通和断开两种情况一样，我们用1和0来表达这两种信息。在足够小又足够多的电路中，我们就能有大量的0和1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【计算机组成原理】基础">
+<meta property="og:url" content="https://null-528.github.io/post/60fe0c4f.html">
+<meta property="og:site_name" content="EternalLoop">
+<meta property="og:description" content="信息的表达 思考: 我们为什么需要计算机？它是用来解决什么问题的？ 本质上就是我们采用可操作的电路，来运输、计算和记录信息。为了实现这个目标，我们需要思考如何将信息通过合理的形式，在电路上进行表达（甚至后续进行的进行检测和修复）。  我们需要将概念落地工程化。首先，怎样在电路中表达信息？正如电路有连通和断开两种情况一样，我们用1和0来表达这两种信息。在足够小又足够多的电路中，我们就能有大量的0和1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://null-528.github.io/img/avatar.jpg">
+<meta property="article:published_time" content="2022-04-22T12:13:06.000Z">
+<meta property="article:modified_time" content="2024-06-19T08:28:03.184Z">
+<meta property="article:author" content="Amber">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://null-528.github.io/img/avatar.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://null-528.github.io/post/60fe0c4f.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":-1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Amber","link":"链接: ","source":"来源: EternalLoop","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【计算机组成原理】基础',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-06-19 16:28:03'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1b210f')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#455227')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/default_img.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="EternalLoop"><span class="site-name">EternalLoop</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">【计算机组成原理】基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2022-04-22T12:13:06.000Z" title="发表于 2022-04-22 20:13:06">2022-04-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="【计算机组成原理】基础"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="信息的表达"><a href="#信息的表达" class="headerlink" title="信息的表达"></a>信息的表达</h1><blockquote>
+<p>思考: 我们为什么需要计算机？它是用来解决什么问题的？</p>
+<p>本质上就是我们采用可操作的电路，来运输、计算和记录信息。为了实现这个目标，我们需要思考如何将信息通过合理的形式，在电路上进行表达（甚至后续进行的进行检测和修复）。</p>
+</blockquote>
+<p>我们需要将概念落地工程化。首先，怎样在电路中表达信息？<br>正如电路有连通和断开两种情况一样，我们用1和0来表达这两种信息。在足够小又足够多的电路中，我们就能有大量的0和1。正如英文有26个字母，只要我们将信息和字母排列组合做出映射（单词表），那么我们就能够表达丰富的语言一样，0和1作为2个基础字母，在计算机世界中也就能表达各种各样的含义。再加上一些逻辑原件，那么就可以进行相关的计算了！</p>
+<h1 id="计算机的出现"><a href="#计算机的出现" class="headerlink" title="计算机的出现"></a>计算机的出现</h1><blockquote>
+<p>比如第一台电子计算机ENIAC（electronic numerical integrator and computer）电子数值积分计算机，是1943-1946美国宾夕法尼亚大学研制的，有<strong>18000多个电子管，1500个继电器，重达30吨，占地约170平方米，耗电140kw</strong>，每秒能计算5000次加法。这台计算机是美国陆军部资助研发的，二战期间用于辅助新武器弹道计算。 </p>
+<p>它的缺点是只能存20个长度为10位的十进制数，并且需要人工改线路连接来编排程序，计算准备时间大大超过实际使用时间，故障排查也很费精力。<br>我们常常将计算机故障称为bug，也是由于这个阶段中电路和原件可能由于小飞虫进度出现故障。</p>
+</blockquote>
+<h2 id="计算机基础架构"><a href="#计算机基础架构" class="headerlink" title="计算机基础架构"></a>计算机基础架构</h2><p>与此同时冯诺依曼和莫尔小组合作研制EDVAC计算机，特点是不需要人工修改线路，而是将指令（程序）存储起来，计算机按照指令顺序执行，每步骤的计算结果放入存储器中。其后在相当长的一段时间内开发的计算机都和EDVAC计算机的方案保持一致，我们称为<strong>冯诺依曼型计算机</strong>，一般是由5个部分构成：<strong>运算器、控制器、存储器、输入设备和输出设备</strong>。<br>（1）采用二进制表达信息；<br>（2）将数据和指令都以二进制的方式存储在存储器中；<br>（3）运算器是整个机器的核心，输入输出设备与存储器件中的数据运输都是通过运算器。<br>（4）指令由操作码和地址码构成。<br>（5）指令在存储器中按照执行顺序存放，由指令计数器（即程序计算器PC）指明要执行指令所在的存储单元地址，一般按照顺序递增，但可按运算结果或外界条件改变。<br>我们说的CPU，实际上包含了运算器和控制器。</p>
+<blockquote>
+<p>计算机的整体架构就比较明确了，接下来同样的，我们要解决的是工程落地问题，为了实现这些内容，我们会问出以下问题：<br>（1）怎样用二进制表达信息，如何用最小的成本表达最多的信息？<br>（2）什么是存储器，它是怎样存储二进制信息的，以及如何在有电&#x2F;断电情况下继续保持信息？<br>（3）运算器有哪些，分别有什么作用？<br>（4）指令是怎样执行的？PC如何选择要执行的指令，在执行故障时如何中断程序并给出信息？<br>（5）如何在运行过程中允许监听外部指令，做到对用户指令进行反馈？</p>
+</blockquote>
+<p>带着上面的问题，后面的文章也大概分为了四章，带着我的理解尽量解释。在这个过程中不可避免地会涉及到其他材料、数字逻辑、信息论内容，我们会简单提一下，如果要研究清除这一个个问题真的会花费不少的精力。</p>
+<h1 id="计算机的发展"><a href="#计算机的发展" class="headerlink" title="计算机的发展"></a>计算机的发展</h1><p>我们一般根据计算机使用的物理器件来划分电子计算机发展史（注意电子计算机之前还有卡片机，在卡片上打孔），一般划分为这5个阶段，相邻阶段之间可能有部分时间重叠。</p>
+<h2 id="电子管计算机时代（1940是-1950s）"><a href="#电子管计算机时代（1940是-1950s）" class="headerlink" title="电子管计算机时代（1940是~1950s）"></a>电子管计算机时代（1940是~1950s）</h2><p>1940s第一台电子计算机ENIAC由于军事需求研制，二战结束后美国IBM公司崛起，1954年开始推出IBM650小型机，1958年IBM709大型机是IBM公司性能最高的最后一台电子管计算机。</p>
+<h2 id="晶体管计算机时代（1950s-1960s）"><a href="#晶体管计算机时代（1950s-1960s）" class="headerlink" title="晶体管计算机时代（1950s~1960s）"></a>晶体管计算机时代（1950s~1960s）</h2><p>晶体管和电子管（真空管）都是电信号放大的元器件，晶体管出现更晚一些，是1947年贝尔实验室的肖克利团队造出了第一个晶体管，比电子管体积更小，寿命更长，价格更便宜，功耗更低。<br>电子管是通过热电子发射阴阳极之间的电场来控制电流的，为了避免热损耗，单个晶体管的发热材料需要套在一个真空内壳里，这就决定了晶体管的体积不会太小，并且也更容易坏。而现代1个5纳米的芯片上甚至可以有百亿个晶体管，因此晶体管基本已经取代了电子管的地位。<br>1960~1964年CDC公司研制了大型高速计算机系统CDC6600，深受美国和西欧各原子能、宇宙、航空、气象研究和大学的欢迎。1969年的CDC7600计算速度更是达到了每秒千万次浮点运算。</p>
+<h2 id="集成电路计算机时代（1960s-1970s）"><a href="#集成电路计算机时代（1960s-1970s）" class="headerlink" title="集成电路计算机时代（1960s~1970s）"></a>集成电路计算机时代（1960s~1970s）</h2><p>集成电路可以理解为最早的芯片雏形。将多个晶体管、电容、电阻在硅芯片上互联，相比晶体管，体积、功耗、成本进一步下降，因此计算机的体积进一步缩小了，也在市场上开始进一步流通小型机。<br>如IBM360系统，型号有小中大三种，运算速度也是从每秒几千次到每秒百万次。</p>
+<h2 id="大规模集成电路计算机时代（1970s-1980s）"><a href="#大规模集成电路计算机时代（1970s-1980s）" class="headerlink" title="大规模集成电路计算机时代（1970s~1980s）"></a>大规模集成电路计算机时代（1970s~1980s）</h2><p>在半导体晶体管后，人们又发明了半导体存储器替代磁芯存储器，著名的摩尔定律就是这个时候提出的。1971年，Intel4004芯片问世，小型机的性能进一步提升，更广泛地应用于各种高精尖行业中。<br>同时家用计算机也开始兴起，1977年Apple推出了Apple II微机，1981年IBM公司推出了IBM PC。</p>
+<h2 id="超大规模集成电路计算机时代（1980s-now）"><a href="#超大规模集成电路计算机时代（1980s-now）" class="headerlink" title="超大规模集成电路计算机时代（1980s~now）"></a>超大规模集成电路计算机时代（1980s~now）</h2><p>目前，高性能微处理器芯片所含的晶体管数量突破亿级，Apple的A16芯片更是集成160亿晶体管。智能手机等更小型设备也进入了人们的生活，从而形成了互联网出现的基本前提。</p>
+<p>现在的计算机也不仅仅用于单纯数据计算，还有很多软件服务，因此我们补充一下计算机系统结构：</p>
+<p><img src="/../images/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F.jpg" alt="计算机整体架构"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://null-528.github.io">Amber</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://null-528.github.io/post/60fe0c4f.html">https://null-528.github.io/post/60fe0c4f.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://null-528.github.io" target="_blank">EternalLoop</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/947584e1.html" title="【计算机组成原理】存储器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【计算机组成原理】存储器</div></div></a></div><div class="next-post pull-right"><a href="/post/3c50d03d.html" title="【开发工具】Markdown语法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【开发工具】Markdown语法</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Amber</div><div class="author-info__description">Exploring the Infinite</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Null-528"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E8%BE%BE"><span class="toc-number">1.</span> <span class="toc-text">信息的表达</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%87%BA%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">计算机的出现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">计算机基础架构</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%8F%91%E5%B1%95"><span class="toc-number">3.</span> <span class="toc-text">计算机的发展</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E5%AD%90%E7%AE%A1%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%97%B6%E4%BB%A3%EF%BC%881940%E6%98%AF-1950s%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">电子管计算机时代（1940是~1950s）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%B6%E4%BD%93%E7%AE%A1%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%97%B6%E4%BB%A3%EF%BC%881950s-1960s%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">晶体管计算机时代（1950s~1960s）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E7%94%B5%E8%B7%AF%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%97%B6%E4%BB%A3%EF%BC%881960s-1970s%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">集成电路计算机时代（1960s~1970s）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E8%A7%84%E6%A8%A1%E9%9B%86%E6%88%90%E7%94%B5%E8%B7%AF%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%97%B6%E4%BB%A3%EF%BC%881970s-1980s%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">大规模集成电路计算机时代（1970s~1980s）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B6%85%E5%A4%A7%E8%A7%84%E6%A8%A1%E9%9B%86%E6%88%90%E7%94%B5%E8%B7%AF%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%97%B6%E4%BB%A3%EF%BC%881980s-now%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">超大规模集成电路计算机时代（1980s~now）</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/274a496e.html" title="【开发工具】Gradle使用手册">【开发工具】Gradle使用手册</a><time datetime="2024-04-28T07:40:03.000Z" title="发表于 2024-04-28 15:40:03">2024-04-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/24a1a957.html" title="消息队列-rabbitMQ">消息队列-rabbitMQ</a><time datetime="2024-04-19T09:10:12.000Z" title="发表于 2024-04-19 17:10:12">2024-04-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/fec99276.html" title="消息队列">消息队列</a><time datetime="2024-04-12T03:36:35.000Z" title="发表于 2024-04-12 11:36:35">2024-04-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/23ac10a5.html" title="【方案设计】分布式心跳检测方案Phi-Accrual-FailureDetector">【方案设计】分布式心跳检测方案Phi-Accrual-FailureDetector</a><time datetime="2024-04-08T03:14:30.000Z" title="发表于 2024-04-08 11:14:30">2024-04-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/cd861ef5.html" title="SpringBoot扩展点:EnvironmentPostProcessor">SpringBoot扩展点:EnvironmentPostProcessor</a><time datetime="2024-03-18T11:41:26.000Z" title="发表于 2024-03-18 19:41:26">2024-03-18</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/default_img.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Amber</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">世界上最开心的事情就是晒太阳(≧▽≦)</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" type="module"></script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addGlobalFn('themeChange', runMermaid, 'mermaid')
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

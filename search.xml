@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>Gradle使用手册</title>
+      <title>【开发工具】Gradle使用手册</title>
       <link href="/post/274a496e.html"/>
       <url>/post/274a496e.html</url>
       
@@ -79,7 +79,7 @@
     
     
     <entry>
-      <title>分布式心跳检测方案Phi-Accrual-FailureDetector</title>
+      <title>【方案设计】分布式心跳检测方案Phi-Accrual-FailureDetector</title>
       <link href="/post/23ac10a5.html"/>
       <url>/post/23ac10a5.html</url>
       
@@ -88,7 +88,7 @@
       
       <categories>
           
-          <category> 分布式 </category>
+          <category> 分布式，方案 </category>
           
       </categories>
       
@@ -198,7 +198,7 @@
     
     
     <entry>
-      <title>【Java基础系列】代理</title>
+      <title>【Java系列】代理</title>
       <link href="/post/53c8b77c.html"/>
       <url>/post/53c8b77c.html</url>
       
@@ -223,7 +223,51 @@
     
     
     <entry>
-      <title>Markdown语法</title>
+      <title>【计算机组成原理】存储器</title>
+      <link href="/post/947584e1.html"/>
+      <url>/post/947584e1.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="为什么要有存储器"><a href="#为什么要有存储器" class="headerlink" title="为什么要有存储器"></a>为什么要有存储器</h1><p>我们知道，计算机中的主要存储设备包括了cache、主存、辅存，容量依次增大，速度依次减慢。<br>主存需要存储正在执行的程序和大量数据（CPU寄存器也会存储一小部分）。在如今这种计算机有大量输入输出设备的前提下，为了快速传输数据，支持存储器与输入输出设备之间直接传输数据，这种技术叫DMA直接存储器存储。</p><h1 id="主存"><a href="#主存" class="headerlink" title="主存"></a>主存</h1><h2 id="技术指标"><a href="#技术指标" class="headerlink" title="技术指标"></a>技术指标</h2><p>容量：即主存最大寻址范围。如，32位微型机提供32位物理地址，即支持2^32&#x3D;4G主存空间。<br>存取时间：存储器访问时间，指启动一次存储器操作到完成该操作所用的时间。<br>存取周期：值连续启动两次独立的存储器操作（例如连续两次读取操作）所需要的最小时间。通常存储周期略大于存取时间。<br>但相比与高速的CPU，主存的读取还是慢了非常多。由于指令存储在主存，因此可能出现存储速度跟不上CPU处理指令和数据的速度。</p><h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><h3 id="RAM易失性存储器"><a href="#RAM易失性存储器" class="headerlink" title="RAM易失性存储器"></a>RAM易失性存储器</h3><p>RAM又称读写存储器，CPU缓存、电脑缓存和手机内存基本都属于RAM。RAM根据能否长时间保存数据，又分为动态RAM和静态RAM：<br>动态RAM：通过MOS电容是否存储电荷表达信息，在断开电源后，电容会放电，因此存储的数据在断电后丢失。<br>静态RAM：通过触发器门电路存储信息，需要使用6个或者更多的晶体管构成特殊电路来表达1个bit。触发器断电后，就会失去存储的数据。<br><strong>静态RAM集成度低，功耗大，速度快；动态RAM集成度高，功耗小，价格低廉，因此适合用于大容量存储</strong>。</p><h3 id="ROM非易失性存储器"><a href="#ROM非易失性存储器" class="headerlink" title="ROM非易失性存储器"></a>ROM非易失性存储器</h3><p>固态硬盘、U盘、买手机说的32G、64G存储空间就属于ROM。<br>ROM即叫Read Only Memory，在厂商制造时写入数据，然后不可更改了（熔丝已经被焊死了），例如BIOS就在ROM上，早期的CD、DVD也都属于ROM。</p><blockquote><p><strong>但实际上现在主要使用的ROM也有很多种可写的</strong>：<br>PROM(Programmable ROM)可编程只读寄存器，如一些英语学习机，厂商造出存储器后卖给学习机工厂，学习机工程师再只写入一次数据，然后就只读了。也就是说，熔丝刚开始是全部接通的，用户可以按需求断开部分熔丝（也就是我们说的烧到板子上）。<br>EPROM(Erasable programmable ROM)可擦可编程只读存储器，通过紫外线擦除电荷，编程次数不受限制。<br>EEPROM(Electrically erasable programmable ROM)电子式可擦可编程只读存储器，通过电擦除电荷，但重复改写次数有限，大概10w上下。<br>Flash Memory：闪存。电擦除且次数不受限制，具有大容量、非易失、低价格的特点。<br>例如我们现在手机内存，用的都是可重复写入的ROM了。</p></blockquote><h2 id="存储系统"><a href="#存储系统" class="headerlink" title="存储系统"></a>存储系统</h2><p>一般我们使用半导体动态RAM作为计算机主存（即内存），存放正在执行的程序和数据<br>磁盘、磁带、光盘、U盘、</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机组成原理 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 存储器 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【计算机组成原理】基础</title>
+      <link href="/post/60fe0c4f.html"/>
+      <url>/post/60fe0c4f.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="信息的表达"><a href="#信息的表达" class="headerlink" title="信息的表达"></a>信息的表达</h1><blockquote><p>思考: 我们为什么需要计算机？它是用来解决什么问题的？</p><p>本质上就是我们采用可操作的电路，来运输、计算和记录信息。为了实现这个目标，我们需要思考如何将信息通过合理的形式，在电路上进行表达（甚至后续进行的进行检测和修复）。</p></blockquote><p>我们需要将概念落地工程化。首先，怎样在电路中表达信息？<br>正如电路有连通和断开两种情况一样，我们用1和0来表达这两种信息。在足够小又足够多的电路中，我们就能有大量的0和1。正如英文有26个字母，只要我们将信息和字母排列组合做出映射（单词表），那么我们就能够表达丰富的语言一样，0和1作为2个基础字母，在计算机世界中也就能表达各种各样的含义。再加上一些逻辑原件，那么就可以进行相关的计算了！</p><h1 id="计算机的出现"><a href="#计算机的出现" class="headerlink" title="计算机的出现"></a>计算机的出现</h1><blockquote><p>比如第一台电子计算机ENIAC（electronic numerical integrator and computer）电子数值积分计算机，是1943-1946美国宾夕法尼亚大学研制的，有<strong>18000多个电子管，1500个继电器，重达30吨，占地约170平方米，耗电140kw</strong>，每秒能计算5000次加法。这台计算机是美国陆军部资助研发的，二战期间用于辅助新武器弹道计算。 </p><p>它的缺点是只能存20个长度为10位的十进制数，并且需要人工改线路连接来编排程序，计算准备时间大大超过实际使用时间，故障排查也很费精力。<br>我们常常将计算机故障称为bug，也是由于这个阶段中电路和原件可能由于小飞虫进度出现故障。</p></blockquote><h2 id="计算机基础架构"><a href="#计算机基础架构" class="headerlink" title="计算机基础架构"></a>计算机基础架构</h2><p>与此同时冯诺依曼和莫尔小组合作研制EDVAC计算机，特点是不需要人工修改线路，而是将指令（程序）存储起来，计算机按照指令顺序执行，每步骤的计算结果放入存储器中。其后在相当长的一段时间内开发的计算机都和EDVAC计算机的方案保持一致，我们称为<strong>冯诺依曼型计算机</strong>，一般是由5个部分构成：<strong>运算器、控制器、存储器、输入设备和输出设备</strong>。<br>（1）采用二进制表达信息；<br>（2）将数据和指令都以二进制的方式存储在存储器中；<br>（3）运算器是整个机器的核心，输入输出设备与存储器件中的数据运输都是通过运算器。<br>（4）指令由操作码和地址码构成。<br>（5）指令在存储器中按照执行顺序存放，由指令计数器（即程序计算器PC）指明要执行指令所在的存储单元地址，一般按照顺序递增，但可按运算结果或外界条件改变。<br>我们说的CPU，实际上包含了运算器和控制器。</p><blockquote><p>计算机的整体架构就比较明确了，接下来同样的，我们要解决的是工程落地问题，为了实现这些内容，我们会问出以下问题：<br>（1）怎样用二进制表达信息，如何用最小的成本表达最多的信息？<br>（2）什么是存储器，它是怎样存储二进制信息的，以及如何在有电&#x2F;断电情况下继续保持信息？<br>（3）运算器有哪些，分别有什么作用？<br>（4）指令是怎样执行的？PC如何选择要执行的指令，在执行故障时如何中断程序并给出信息？<br>（5）如何在运行过程中允许监听外部指令，做到对用户指令进行反馈？</p></blockquote><p>带着上面的问题，后面的文章也大概分为了四章，带着我的理解尽量解释。在这个过程中不可避免地会涉及到其他材料、数字逻辑、信息论内容，我们会简单提一下，如果要研究清除这一个个问题真的会花费不少的精力。</p><h1 id="计算机的发展"><a href="#计算机的发展" class="headerlink" title="计算机的发展"></a>计算机的发展</h1><p>我们一般根据计算机使用的物理器件来划分电子计算机发展史（注意电子计算机之前还有卡片机，在卡片上打孔），一般划分为这5个阶段，相邻阶段之间可能有部分时间重叠。</p><h2 id="电子管计算机时代（1940是-1950s）"><a href="#电子管计算机时代（1940是-1950s）" class="headerlink" title="电子管计算机时代（1940是~1950s）"></a>电子管计算机时代（1940是~1950s）</h2><p>1940s第一台电子计算机ENIAC由于军事需求研制，二战结束后美国IBM公司崛起，1954年开始推出IBM650小型机，1958年IBM709大型机是IBM公司性能最高的最后一台电子管计算机。</p><h2 id="晶体管计算机时代（1950s-1960s）"><a href="#晶体管计算机时代（1950s-1960s）" class="headerlink" title="晶体管计算机时代（1950s~1960s）"></a>晶体管计算机时代（1950s~1960s）</h2><p>晶体管和电子管（真空管）都是电信号放大的元器件，晶体管出现更晚一些，是1947年贝尔实验室的肖克利团队造出了第一个晶体管，比电子管体积更小，寿命更长，价格更便宜，功耗更低。<br>电子管是通过热电子发射阴阳极之间的电场来控制电流的，为了避免热损耗，单个晶体管的发热材料需要套在一个真空内壳里，这就决定了晶体管的体积不会太小，并且也更容易坏。而现代1个5纳米的芯片上甚至可以有百亿个晶体管，因此晶体管基本已经取代了电子管的地位。<br>1960~1964年CDC公司研制了大型高速计算机系统CDC6600，深受美国和西欧各原子能、宇宙、航空、气象研究和大学的欢迎。1969年的CDC7600计算速度更是达到了每秒千万次浮点运算。</p><h2 id="集成电路计算机时代（1960s-1970s）"><a href="#集成电路计算机时代（1960s-1970s）" class="headerlink" title="集成电路计算机时代（1960s~1970s）"></a>集成电路计算机时代（1960s~1970s）</h2><p>集成电路可以理解为最早的芯片雏形。将多个晶体管、电容、电阻在硅芯片上互联，相比晶体管，体积、功耗、成本进一步下降，因此计算机的体积进一步缩小了，也在市场上开始进一步流通小型机。<br>如IBM360系统，型号有小中大三种，运算速度也是从每秒几千次到每秒百万次。</p><h2 id="大规模集成电路计算机时代（1970s-1980s）"><a href="#大规模集成电路计算机时代（1970s-1980s）" class="headerlink" title="大规模集成电路计算机时代（1970s~1980s）"></a>大规模集成电路计算机时代（1970s~1980s）</h2><p>在半导体晶体管后，人们又发明了半导体存储器替代磁芯存储器，著名的摩尔定律就是这个时候提出的。1971年，Intel4004芯片问世，小型机的性能进一步提升，更广泛地应用于各种高精尖行业中。<br>同时家用计算机也开始兴起，1977年Apple推出了Apple II微机，1981年IBM公司推出了IBM PC。</p><h2 id="超大规模集成电路计算机时代（1980s-now）"><a href="#超大规模集成电路计算机时代（1980s-now）" class="headerlink" title="超大规模集成电路计算机时代（1980s~now）"></a>超大规模集成电路计算机时代（1980s~now）</h2><p>目前，高性能微处理器芯片所含的晶体管数量突破亿级，Apple的A16芯片更是集成160亿晶体管。智能手机等更小型设备也进入了人们的生活，从而形成了互联网出现的基本前提。</p><p>现在的计算机也不仅仅用于单纯数据计算，还有很多软件服务，因此我们补充一下计算机系统结构：</p><p><img src="/../images/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F.jpg" alt="计算机整体架构"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机组成原理 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【开发工具】Markdown语法</title>
       <link href="/post/3c50d03d.html"/>
       <url>/post/3c50d03d.html</url>
       
@@ -248,7 +292,7 @@
     
     
     <entry>
-      <title>IDEA修改使用的JDK版本</title>
+      <title>【开发经验】IDEA修改使用的JDK版本</title>
       <link href="/post/2052380.html"/>
       <url>/post/2052380.html</url>
       
@@ -257,7 +301,7 @@
       
       <categories>
           
-          <category> 工具 </category>
+          <category> 工具 经验 </category>
           
       </categories>
       
@@ -273,7 +317,7 @@
     
     
     <entry>
-      <title>IDEA调式技巧</title>
+      <title>【开发经验】IDEA调式技巧</title>
       <link href="/post/f3b3a2f5.html"/>
       <url>/post/f3b3a2f5.html</url>
       
@@ -282,7 +326,7 @@
       
       <categories>
           
-          <category> 工具 </category>
+          <category> 工具 经验 </category>
           
       </categories>
       
@@ -302,7 +346,7 @@
       <link href="/post/4a17b156.html"/>
       <url>/post/4a17b156.html</url>
       
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p><h2 id="my-frequently-used-commands"><a href="#my-frequently-used-commands" class="headerlink" title="my frequently used commands"></a>my frequently used commands</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new post <span class="string">&#x27;postname&#x27;</span></span><br><span class="line">$ hexo cl &amp;&amp; hexo g &amp;&amp; hexo s</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>]]></content>
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p><h2 id="my-frequently-used-commands"><a href="#my-frequently-used-commands" class="headerlink" title="my frequently used commands"></a>my frequently used commands</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new post <span class="string">&#x27;postname&#x27;</span></span><br><span class="line">$ hexo cl &amp;&amp; hexo g &amp;&amp; hexo s</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure><p>hexo项目需要迁移&#x2F;换电脑时，直接将项目打包复制到新电脑上即可，node_modules部分文件可能由于网络下载会被拦截，<br>mac可在隐私与安全中选择不拦截即可正常使用</p>]]></content>
       
       
       
