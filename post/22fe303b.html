@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【分布式协议】Raft 和 Gossip 协议 | EternalLoop</title><meta name="author" content="Amber"><meta name="copyright" content="Amber"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#455227"><meta name="description" content="为避免单点故障，部分服务通过分布式来提高系统稳定性，由此出现了数据一致性的需求。一致性有强一致性和弱一致性（最终一致性）：  强一致性：数据一旦更新，所有节点上的数据都是同步的，例如 Paxos、Raft[1]、ZAB 协议等。 弱一致性：数据更新后，不同节点上的数据可能不一致，但最终会达到一致的状态，例如 Gossip 协议。  12345常见的分布式数据库使用的分布式协议：1. Raft：ex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【分布式协议】Raft 和 Gossip 协议">
+<meta property="og:url" content="https://null-528.github.io/post/22fe303b.html">
+<meta property="og:site_name" content="EternalLoop">
+<meta property="og:description" content="为避免单点故障，部分服务通过分布式来提高系统稳定性，由此出现了数据一致性的需求。一致性有强一致性和弱一致性（最终一致性）：  强一致性：数据一旦更新，所有节点上的数据都是同步的，例如 Paxos、Raft[1]、ZAB 协议等。 弱一致性：数据更新后，不同节点上的数据可能不一致，但最终会达到一致的状态，例如 Gossip 协议。  12345常见的分布式数据库使用的分布式协议：1. Raft：ex">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://null-528.github.io/img/avatar.jpg">
+<meta property="article:published_time" content="2024-12-06T07:33:58.000Z">
+<meta property="article:modified_time" content="2024-12-06T10:29:42.918Z">
+<meta property="article:author" content="Amber">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://null-528.github.io/img/avatar.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://null-528.github.io/post/22fe303b.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":-1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Amber","link":"链接: ","source":"来源: EternalLoop","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【分布式协议】Raft 和 Gossip 协议',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-12-06 18:29:42'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1b210f')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#455227')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">24</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/default_img.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="EternalLoop"><span class="site-name">EternalLoop</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">【分布式协议】Raft 和 Gossip 协议</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2024-12-06T07:33:58.000Z" title="发表于 2024-12-06 15:33:58">2024-12-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="【分布式协议】Raft 和 Gossip 协议"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>为避免单点故障，部分服务通过分布式来提高系统稳定性，由此出现了数据一致性的需求。一致性有强一致性和弱一致性（最终一致性）：</p>
+<ul>
+<li>强一致性：数据一旦更新，所有节点上的数据都是同步的，例如 Paxos、Raft[1]、ZAB 协议等。</li>
+<li>弱一致性：数据更新后，不同节点上的数据可能不一致，但最终会达到一致的状态，例如 Gossip 协议。</li>
+</ul>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">常见的分布式数据库使用的分布式协议：</span><br><span class="line"><span class="bullet">1.</span> Raft：excd、HBase、MongoDB</span><br><span class="line"><span class="bullet">2.</span> ZAB：Zookeeper</span><br><span class="line"><span class="bullet">3.</span> Paxos：Chubby、Riak</span><br><span class="line"><span class="bullet">4.</span> Gossip：Cassandra、Dynamo</span><br></pre></td></tr></table></figure>
+
+<p>这一章节分别讨论强一致和弱一致的各自一种代表协议： Raft 和 Gossip。</p>
+<h1 id="1-概念对比"><a href="#1-概念对比" class="headerlink" title="1. 概念对比"></a>1. 概念对比</h1><h2 id="1-1-Raft中的关键概念"><a href="#1-1-Raft中的关键概念" class="headerlink" title="1.1 Raft中的关键概念"></a>1.1 Raft中的关键概念</h2><p>Raft 是一种为分布式系统设计的一致性算法，用于确保多个节点之间的数据达成一致。以下是 Raft 中的一些关键概念：</p>
+<h3 id="角色："><a href="#角色：" class="headerlink" title="角色："></a>角色：</h3><ul>
+<li>Leader（领导者）： Raft 中的一个节点被选为领导者，负责处理客户端请求和管理日志的复制。领导者周期性地发送心跳以保持其领导地位。</li>
+<li>Follower（跟随者）： 其他节点是跟随者，它们 passively 处理领导者的请求。如果一个跟随者在一定时间内没有收到领导者的心跳，它可能会发起领导者选举。</li>
+<li>Candidate（候选人）： 当一个节点希望成为领导者时，它首先成为候选人，并请求其他节点投票。</li>
+</ul>
+<h3 id="功能："><a href="#功能：" class="headerlink" title="功能："></a>功能：</h3><ul>
+<li>领导者选举（Leader Election）： Raft 使用随机化的选举超时来触发领导者选举。节点在等待随机时间后成为候选人，请求其他节点的投票。如果一个候选人收到大多数节点的投票，它将成为新的领导者。</li>
+<li>日志复制（Log Replication）： 领导者负责将客户端的请求附加到其日志中，并通过心跳将日志条目复制到跟随者。只有被大多数节点确认的日志条目才被认为是已提交的。</li>
+<li>心跳（Heartbeat）： 领导者通过周期性的心跳消息向跟随者表明其活跃状态。如果一个跟随者在一定时间内没有收到心跳，它可能认为领导者失效并触发领导者选举。</li>
+<li>选举超时（Election Timeout）： 用于触发领导者选举的随机化超时机制。节点在等待一个随机的选举超时后成为候选人。</li>
+<li>保持一致性（Maintaining Consistency）： Raft 通过使用投票和多数确认来确保数据一致性。只有在大多数节点都同意的情况下，领导者的日志才会被认为是已提交的。</li>
+<li>集群成员变更： Raft 允许动态地添加或删除节点。节点加入或离开集群时，Raft 使用一种叫做集群成员变更的机制来保持一致性。</li>
+<li>复制状态机（Replicated State Machine）： Raft 通过复制状态机的方式来实现一致性。每个节点上都有一个状态机，领导者通过复制日志条目来更新状态机的状态。</li>
+</ul>
+<p>这些概念共同确保了 Raft 算法在分布式系统中的可靠运行，提供了一致性和容错性。 Raft 的设计目标是易于理解和实现，以提高分布式系统的可维护性。</p>
+<h1 id="1-2-Gossip中的关键概念"><a href="#1-2-Gossip中的关键概念" class="headerlink" title="1.2 Gossip中的关键概念"></a>1.2 Gossip中的关键概念</h1><p>Gossip 是一种去中心化的通信协议，用于在分布式系统中传播信息。以下是 Gossip 中的一些关键概念：</p>
+<h3 id="角色：-1"><a href="#角色：-1" class="headerlink" title="角色："></a>角色：</h3><ul>
+<li>节点（Nodes）： 分布式系统中的独立单元。每个节点都有一个状态，可能是需要在整个系统中传播的信息。</li>
+<li>种子节点（Seed）： 种子节点可以是系统中的任意节点，它负责发起信息传播过程。</li>
+</ul>
+<h3 id="功能：-1"><a href="#功能：-1" class="headerlink" title="功能："></a>功能：</h3><ul>
+<li>信息传播（Information Propagation）： Gossip 协议的核心目标是通过节点之间的随机通信来传播信息。节点定期与其他节点随机选择的邻居通信，交换状态信息。</li>
+<li>去中心化通信（Decentralized Communication）： Gossip 不依赖于中心化的结构。节点之间的通信是去中心化的，每个节点可以直接与其他节点通信，而无需通过中心协调者。</li>
+<li>状态信息（State Information）： 每个节点都包含一些状态信息，这些信息需要在整个系统中传播。这可能包括节点的健康状态、负载情况等。</li>
+<li>信息随机传播（Randomized Information Propagation）： Gossip 使用随机选择的邻居节点进行信息传播。这种随机性有助于确保整个系统中的信息快速传播。</li>
+<li>信息更新（Information Update）： 当节点与其他节点通信时，它们可能会交换状态信息并更新自己的状态。这确保了系统中的信息保持最新。</li>
+<li>最终一致性（Eventual Consistency）： Gossip 的设计目标之一是实现最终一致性。虽然在某个时间点不同节点之间的状态可能不同，但随着时间的推移，系统中的状态将趋于一致。</li>
+<li>容错性（Fault Tolerance）： Gossip 具有一定的容错性。即使某些节点失效，信息仍然可以通过其他路径传播，从而提高系统的健壮性。</li>
+<li>可扩展性（Scalability）： 由于通信是去中心化的，Gossip 具有良好的可扩展性。随着节点的增加，系统的整体性能不会线性下降。</li>
+<li>定期通信（Periodic Communication）： 节点之间的通信是定期进行的。每个节点定期选择邻居节点进行信息交换。</li>
+</ul>
+<p>Gossip 协议的灵活性和去中心化特性使其成为某些分布式系统中有效的通信机制。节点之间的信息传播通过简单、分散和随机的方式进行，从而提高了系统的可扩展性和容错性。</p>
+<h1 id="2-信息传播对比"><a href="#2-信息传播对比" class="headerlink" title="2. 信息传播对比"></a>2. 信息传播对比</h1><h2 id="2-1-Raft信息传播"><a href="#2-1-Raft信息传播" class="headerlink" title="2.1 Raft信息传播"></a>2.1 Raft信息传播</h2><p>Raft是一种分布式一致性算法，它通过选举和日志复制来保证分布式系统中的数据一致性。在Raft中，信息传播的过程如下：</p>
+<ul>
+<li>领导人选举： 在Raft中，每个节点都可以成为领导人，但是只有一个领导人可以同时存在。领导人选举的过程包括选举超时时间、候选人选举和领导人选举等步骤。</li>
+<li>日志复制： 当领导人被选举出来后，它会将日志条目复制到其他节点上。领导人会向其他节点发送心跳消息，以确保其他节点的日志条目与领导人的日志条目保持一致。</li>
+<li>日志条目的提交： 当领导人收到大多数节点的确认消息后，它会将日志条目提交到系统中。提交的日志条目会被应用到状态机中，从而保证数据的一致性。</li>
+<li>日志条目的应用： 当日志条目被提交后，领导人会将其应用到状态机中，并将结果返回给客户端。</li>
+<li>日志条目的复制： 当其他节点收到领导人发送的日志条目时，它们会将日志条目复制到自己的日志中，并向领导人发送确认消息。</li>
+</ul>
+<p>以上就是Raft中信息传播的基本过程。需要注意的是，Raft中的信息传播过程是基于RPC的，因此需要考虑网络延迟、网络分区等因素的影响。</p>
+<h2 id="2-2-Gossip信息传播"><a href="#2-2-Gossip信息传播" class="headerlink" title="2.2 Gossip信息传播"></a>2.2 Gossip信息传播</h2><p>Gossip协议是一种基于点对点通信的分布式信息传播协议，通过随机化的节点选择和信息交换来实现高效的信息传递。在Gossip协议中，信息传播的过程如下：</p>
+<ul>
+<li>种子节点周期性地散播消息： 种子节点可以是系统中的任意节点，它负责发起信息传播过程。</li>
+<li>被感染节点随机选择N个邻接节点散播消息： 被感染节点是指已经接收到消息的节点，它会将消息继续传播给其他节点。邻接节点是指与被感染节点直接相连的节点。</li>
+<li>节点只接收消息不反馈结果： 在Gossip协议中，节点之间没有明确的反馈机制，节点只知道它已经接收到消息，但不知道其他节点是否已经接收到消息。</li>
+<li>每次散播消息都选择尚未发送过的节点进行散播： 这样可以避免消息的重复传播，提高信息传播的效率。</li>
+<li>收到消息的节点不再往发送节点散播： 这样可以减少消息的循环传播，降低网络开销。</li>
+<li>以上就是Gossip协议中信息传播的基本过程。需要注意的是，Gossip协议的信息传播过程是随机化的，因此信息传播的速度和范围可能会受到网络拓扑结构、节点数量等因素的影响。</li>
+</ul>
+<h1 id="3-优缺点对比"><a href="#3-优缺点对比" class="headerlink" title="3. 优缺点对比"></a>3. 优缺点对比</h1><p>Raft和Gossip是两种在分布式系统中广泛应用的协议，它们各自具有不同的优点和缺点。</p>
+<h2 id="3-1-Raft优缺点"><a href="#3-1-Raft优缺点" class="headerlink" title="3.1 Raft优缺点"></a>3.1 Raft优缺点</h2><p>Raft的优点：</p>
+<ul>
+<li>保证强一致性：Raft协议通过一系列机制，如领导者选举和日志复制，确保分布式系统中的数据一致性。</li>
+<li>数据安全性高：Raft协议提供了数据的安全性和可靠性保证，通过日志复制和持久化机制减少了数据丢失的风险。</li>
+<li>易于理解和实现：Raft协议相对简单，易于理解和实现，降低了开发和维护的成本。</li>
+</ul>
+<p>Raft的缺点：</p>
+<ul>
+<li>性能开销大：Raft协议需要维护领导者选举和日志复制等机制，相对于其他一些简单的分布式协议，其性能开销可能较大。</li>
+<li>实现复杂度较高：Raft协议相对复杂，需要开发人员具备一定的分布式系统知识和经验，增加了开发和维护的难度（比较容易出现 bug）。</li>
+</ul>
+<h2 id="3-2-Gossip优缺点"><a href="#3-2-Gossip优缺点" class="headerlink" title="3.2 Gossip优缺点"></a>3.2 Gossip优缺点</h2><p>Gossip的优点：</p>
+<ul>
+<li>简单易实现：Gossip协议相对简单，易于实现和维护，降低了开发成本。</li>
+<li>灵活性高：Gossip协议适用于各种分布式系统，可以根据实际需求进行定制和扩展。<br> -动态适应性强：Gossip协议能够动态适应系统的变化，如节点的增减和网络分区等。</li>
+</ul>
+<p>Gossip的缺点：</p>
+<ul>
+<li>数据一致性难以保证：Gossip协议不保证数据的一致性，需要结合其他机制来确保数据的一致性。</li>
+<li>数据安全性相对较低：由于Gossip协议的数据复制是随机的，因此相对于Raft协议，其数据安全性可能较低。</li>
+<li>性能开销较大：Gossip协议需要进行大量的信息广播和传播，相对于Raft协议，其性能开销可能较大。</li>
+</ul>
+<p>总的来说，Raft和Gossip各有优缺点，选择使用哪种协议需要根据实际需求进行权衡。在需要强一致性和高安全性的场景中，Raft协议是更好的选择；而在需要简单实现、高灵活性和动态适应性的场景中，Gossip协议可能更加适合。</p>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h1><table>
+<thead>
+<tr>
+<th align="left">对比事项</th>
+<th align="left">Raft</th>
+<th align="left">Gossip</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">数据一致性</td>
+<td align="left">Raft 协议通过选举和日志复制机制确保强一致性。</td>
+<td align="left">Gossip 协议不保证数据一致性，主要用于信息传播。</td>
+</tr>
+<tr>
+<td align="left">领导者选举</td>
+<td align="left">Raft 中的领导者选举是核心机制，通过过半数投票产生领导者。</td>
+<td align="left">Gossip 没有领导者选举的概念，信息传播是随机的。</td>
+</tr>
+<tr>
+<td align="left">数据复制</td>
+<td align="left">Raft 通过日志复制机制确保数据安全性和一致性。</td>
+<td align="left">Gossip 没有数据复制机制，仅用于信息传播。</td>
+</tr>
+<tr>
+<td align="left">可用性</td>
+<td align="left">Raft 适用于需要可靠数据一致性的分布式系统，如分布式文件系统、数据库等。</td>
+<td align="left">Gossip 适用于去中心化的分布式系统，如 P2P 网络、信息传播应用等。</td>
+</tr>
+<tr>
+<td align="left">灵活性</td>
+<td align="left">Raft 相对复杂，实现和维护成本较高。</td>
+<td align="left">Gossip 相对简单，易于实现和部署。</td>
+</tr>
+</tbody></table>
+<p>在选择 Raft 和 Gossip 协议时，需要根据实际需求进行权衡。Raft 更适合需要强一致性和可靠数据复制的场景，如分布式文件系统和数据库等。而 Gossip 则适合需要快速信息传播和去中心化系统的场景，如 P2P 网络和信息传播应用等。    </p>
+<p>[1] 论文：In Search of an Understandable Consensus Algorithm (<a target="_blank" rel="noopener" href="https://raft.github.io/raft.pdf">https://raft.github.io/raft.pdf</a>)</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://null-528.github.io">Amber</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://null-528.github.io/post/22fe303b.html">https://null-528.github.io/post/22fe303b.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://null-528.github.io" target="_blank">EternalLoop</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/73d80bc6.html" title="【DevOps】集群日志收集"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【DevOps】集群日志收集</div></div></a></div><div class="next-post pull-right"><a href="/post/49a4663b.html" title="【数据库】时序数据库"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【数据库】时序数据库</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Amber</div><div class="author-info__description">Exploring the Infinite</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">24</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Null-528"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%A6%82%E5%BF%B5%E5%AF%B9%E6%AF%94"><span class="toc-number">1.</span> <span class="toc-text">1. 概念对比</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Raft%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Raft中的关键概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%92%E8%89%B2%EF%BC%9A"><span class="toc-number">1.1.1.</span> <span class="toc-text">角色：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%EF%BC%9A"><span class="toc-number">1.1.2.</span> <span class="toc-text">功能：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-2-Gossip%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">1.2 Gossip中的关键概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%92%E8%89%B2%EF%BC%9A-1"><span class="toc-number">2.0.1.</span> <span class="toc-text">角色：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%EF%BC%9A-1"><span class="toc-number">2.0.2.</span> <span class="toc-text">功能：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E4%BF%A1%E6%81%AF%E4%BC%A0%E6%92%AD%E5%AF%B9%E6%AF%94"><span class="toc-number">3.</span> <span class="toc-text">2. 信息传播对比</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Raft%E4%BF%A1%E6%81%AF%E4%BC%A0%E6%92%AD"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 Raft信息传播</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Gossip%E4%BF%A1%E6%81%AF%E4%BC%A0%E6%92%AD"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 Gossip信息传播</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E4%BC%98%E7%BC%BA%E7%82%B9%E5%AF%B9%E6%AF%94"><span class="toc-number">4.</span> <span class="toc-text">3. 优缺点对比</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-Raft%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 Raft优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Gossip%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 Gossip优缺点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">4. 总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/73d80bc6.html" title="【DevOps】集群日志收集">【DevOps】集群日志收集</a><time datetime="2025-01-11T06:03:27.000Z" title="发表于 2025-01-11 14:03:27">2025-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/22fe303b.html" title="【分布式协议】Raft 和 Gossip 协议">【分布式协议】Raft 和 Gossip 协议</a><time datetime="2024-12-06T07:33:58.000Z" title="发表于 2024-12-06 15:33:58">2024-12-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/49a4663b.html" title="【数据库】时序数据库">【数据库】时序数据库</a><time datetime="2024-12-02T07:06:02.000Z" title="发表于 2024-12-02 15:06:02">2024-12-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/db295f87.html" title="【网络】keep-alive机制">【网络】keep-alive机制</a><time datetime="2024-11-28T13:49:12.000Z" title="发表于 2024-11-28 21:49:12">2024-11-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/15cc54a3.html" title="【网络】网络结构与代表协议">【网络】网络结构与代表协议</a><time datetime="2024-11-28T02:31:58.000Z" title="发表于 2024-11-28 10:31:58">2024-11-28</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/default_img.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Amber</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">世界上最开心的事情就是晒太阳(≧▽≦)</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" type="module"></script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addGlobalFn('themeChange', runMermaid, 'mermaid')
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>
